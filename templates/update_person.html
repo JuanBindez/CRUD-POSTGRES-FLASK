@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+    <title>Update User</title>
+</head>
+<body>
+    <h1>Update User</h1>
+    <a href="/add_person">adicionar</a>
+
+    <form method="post">
+        <h3>{{ user[1] }}</h3>
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" value="{{ user.name }}">
+        <h3>{{ user[2] }}</h3>
+        <label for="number">idade</label>
+        <input type="number" name="idade" id="idade" value="{{ user.idade }}">
+        <button type="submit">Update</button>
+    </form>
+</body>
+</html>
