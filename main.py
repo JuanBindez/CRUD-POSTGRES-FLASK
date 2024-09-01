@@ -16,17 +16,13 @@ import os
 load_dotenv()
 
 def connect_database():
-    try:
-        conn = psycopg2.connect(
-            host=os.environ.get('DB_HOST'),
-            database=os.environ.get('DB_NAME'),
-            user=os.environ.get('DB_USER'),
-            password=os.environ.get('DB_PASSWORD'),
-        )
-        return conn
-    except Exception as e:
-        print(f"Erro ao conectar ao banco de dados: {e}")
-        return None
+    conn = psycopg2.connect(
+        host=os.environ.get('DB_HOST'),
+        dbname=os.environ.get('DB_NAME'),
+        user=os.environ.get('DB_USER'),
+        password=os.environ.get('DB_PASSWORD')
+    )
+    return conn
 
 app = Flask(__name__)
 
@@ -40,69 +36,62 @@ def index():
             users = cursor.fetchall()
             cursor.close()
             conn.close()
+            print("conexão estabelecida com sucesso com o banco de dados!")
             return render_template("index.html", users=users)
         else:
-            return jsonify({"error": "Failed to connect to the database"}), 500
+            jsonify({"Error 01": "Failed to connect to the database"})
 
     except Exception as e:
-        print(f"Erro ao obter os usuários: {e}")
-        return jsonify({"error": "Failed to connect to the database"}), 500
+        print(f"Erro ao conectar ao banco de dados erro: {e}")
+        return jsonify({"Error 02": "Failed to connect to the database"})
     
-@app.route('/add_person', methods=['GET', 'POST'])
+@app.route("/add_person", methods=["GET", "POST"])
 def add_person():
     if request.method == "POST":
         conn = connect_database()
         cursor = conn.cursor()
-        name = request.form['name']
-        idade = request.form['idade']
+        nome = request.form["nome"]
+        idade = request.form["idade"]
 
-        cursor.execute('INSERT INTO users (name, age) VALUES (%s, %s)', (name, idade))
-        conn.commit()
+        cursor.execute('INSERT INTO users (nome, idade) VALUES (%s, %s)', (nome, idade))
         cursor.close()
+        conn.commit()
         conn.close()
-        return redirect(url_for('index'))
-    return render_template('add_person.html')
+        return redirect(url_for("index"))
+    
+    return render_template("add_person.html")
 
-@app.route('/delete_person/<int:id>', methods=['POST'])
+
+@app.route("/delete_person/<int:id>", methods=["POST"])
 def delete_person(id):
     conn = connect_database()
     cursor = conn.cursor()
     cursor.execute('DELETE FROM users WHERE id = %s', (id,))
-    conn.commit()
     cursor.close()
+    conn.commit()
     conn.close()
-    return redirect(url_for('index'))
-    
+    return redirect(url_for("index"))
 
-@app.route('/update_person/<int:id>', methods=["GET", "POST"])
+@app.route("/update_person/<int:id>", methods=["GET", "POST"])
 def update_person(id):
     conn = connect_database()
     cursor = conn.cursor()
-    
-    # Obter os dados do usuário para preencher o formulário
     cursor.execute('SELECT * FROM users WHERE id = %s', (id,))
     user = cursor.fetchone()
-    
+
     if request.method == "POST":
-        print(request.form)  # Adicione esta linha para imprimir o conteúdo de request.form
-        
-        name = request.form.get('name')
-        idade = request.form.get('idade')
+        nome = request.form["nome"]
+        idade = request.form["idade"]
 
-        if not name or not idade:
-            return render_template('update_person.html', user=user)
-        
-        cursor.execute('UPDATE users SET name = %s, age = %s WHERE id = %s', (name, idade, id))
-        conn.commit()
+        cursor.execute('UPDATE users SET nome = %s, idade = %s WHERE id = %s', (nome, idade, id))
         cursor.close()
+        conn.commit()
         conn.close()
+        return redirect(url_for("index"))
 
-        return redirect(url_for('index'))
-    
     cursor.close()
     conn.close()
-    return render_template('update_person.html', user=user)
-
+    return render_template("update_person.html", user=user)
 
 if __name__ == "__main__":
     app.run(debug=True)

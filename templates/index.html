@@ -6,20 +6,17 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="container">
-        <a href="/add_person">adicionar</a>
-        <li>
-            {% for user in users%}
-                <h3>{{ user[0], user[1], user[2] }}</h3>
-                <form action="{{ url_for('update_person', id=user[0]) }}" method="post" style="display:inline;">
-                    <button type="submit">Update</button>
-                </form>
-                <form action="{{ url_for('delete_person', id=user[0]) }}" method="post" style="display:inline;">
-                    <button type="submit">Delete</button>
-                </form>
-                
-            {% endfor %}
-        </li>
-     </div>
+    <a href="/add_person">Cadastrar Pessoas</a>
+    {% for user in users%}
+    <li>
+        <h4> {{ user[0] }}, {{ user[1] }}, {{ user[2] }}</h4>
+        <form action="{{ url_for('update_person', id=user[0]) }}" method="GET">
+            <button type="submit">Atualizar</button>
+        </form>
+        <form action="{{ url_for('delete_person', id=user[0]) }}" method="POST">
+            <button type="submit">Deletar</button>
+        </form>
+    </li>
+    {% endfor %}
 </body>
 </html>
