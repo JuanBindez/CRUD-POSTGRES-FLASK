@@ -1,4 +1,4 @@
-# CRUD-POSTGRES-FLASK
+# CRUD-postgreSQL-Flask
 
 
 ### Install requirements:
