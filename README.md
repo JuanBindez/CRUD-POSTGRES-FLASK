@@ -4,7 +4,7 @@
 ### Install requirements:
     pip install -r requiments.txt
 
-# DataBase
+## DataBase
 
 #### install postgresql on linux
      sudo apt update
@@ -13,21 +13,21 @@
 #### install flask and psycopg2 connector
      pip install Flask psycopg2-binary
 
-#### acessar o postgre
+#### access postgre
     sudo -i -u postgres
     psql
 
-### executar as configurações de superuser
+### run superuser settings
     CREATE USER myuser WITH PASSWORD 'mypassword';
     ALTER USER myuser WITH SUPERUSER;
     CREATE DATABASE mydatabase;
     GRANT ALL PRIVILEGES ON DATABASE mydatabase TO myuser;
     \q
 
-### para ver os bancos de dados existentes
+### to see existing databases
     \l
 
-### databse access
+### database access
     c\ mydatabase
 
 ### verify useruser
