@@ -1,9 +1,18 @@
+"""
+
+CREATE USER myuser WITH PASSWORD 'mypassword';
+ALTER USER myuser WITH SUPERUSER;
+CREATE DATABASE mydatabase;
+GRANT ALL PRIVILEGES ON DATABASE mydatabase TO myuser;
+
+CREATE TABLE users (id SERIAL PRIMARY KEY, nome VARCHAR(100) NOT NULL, idade INT NOT NULL);
+"""
+
 from flask import Flask, render_template, redirect, jsonify, request, url_for, flash
 import psycopg2
 from dotenv import load_dotenv
 import os
 
-# Carregar as variáveis de ambiente
 load_dotenv()
 
 def connect_database():
