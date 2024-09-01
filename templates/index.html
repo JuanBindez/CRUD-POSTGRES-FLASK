@@ -3,20 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Gerenciamento de Pessoas</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
-<body>
-    <a href="/add_person">Cadastrar Pessoas</a>
-    {% for user in users%}
-    <li>
-        <h4> {{ user[0] }}, {{ user[1] }}, {{ user[2] }}</h4>
-        <form action="{{ url_for('update_person', id=user[0]) }}" method="GET">
-            <button type="submit">Atualizar</button>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Lista de Pessoas</h1>
+    
+    <div class="d-flex justify-content-between mb-4">
+        <form class="form-inline" method="GET" action="/">
+            <input class="form-control mr-sm-2" type="search" placeholder="Pesquisar por nome" aria-label="Pesquisar" name="search" value="{{ request.args.get('search', '') }}">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+                <i class="fas fa-search"></i> Pesquisar
+            </button>
         </form>
-        <form action="{{ url_for('delete_person', id=user[0]) }}" method="POST">
-            <button type="submit">Deletar</button>
-        </form>
-    </li>
-    {% endfor %}
+        <a href="/add_person" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Adicionar Pessoa
+        </a>
+    </div>
+
+    <div class="list-group">
+        {% if users %}
+            {% for user in users %}
+            <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                <span>
+                    <strong>ID:</strong> {{ user[0] }}<br>
+                    <strong>Nome:</strong> {{ user[1] }}<br>
+                    <strong>Idade:</strong> {{ user[2] }}
+                </span>
+                <span class="d-flex">
+                    <form action="{{ url_for('update_person', id=user[0]) }}" method="GET" class="mr-2">
+                        <button type="submit" class="btn btn-warning text-white">
+                            <i class="fas fa-edit"></i> Atualizar
+                        </button>
+                    </form>
+                    <form action="{{ url_for('delete_person', id=user[0]) }}" method="POST">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i> Deletar
+                        </button>
+                    </form>
+                </span>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-warning text-center" role="alert">
+                Nenhuma pessoa encontrada com o nome pesquisado.
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
