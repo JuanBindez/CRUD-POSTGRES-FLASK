@@ -2,7 +2,7 @@
 
 
 ### Install requirements:
-    pip install -r requiments.txt
+    pip install -r requirements.txt
 
 ## DataBase
 
@@ -38,3 +38,7 @@
 ### exit of the shell from postgreSQL
     \q
     exit
+
+### run scripts PostgreSQL
+    
+    psql -h localhost -U postgres -d my_database < schema.sql
